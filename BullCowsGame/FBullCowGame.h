@@ -6,6 +6,15 @@ using int32 = int;
 using FString = std::string;
 
 
+enum class EGuessValidity
+{
+	Ok,
+	Invalid_Length,
+	No_Lowercase,
+	Not_Isogram,
+	InvalidStatus
+};
+
 struct FBullCowsCount {
 	int32 Bulls = 0;
 	int32 Cows = 0;
@@ -21,12 +30,13 @@ public:
 	bool			IsGameWon() const;
 
 	void			Reset();
-	bool			CheckGuessValidity(FString);
-	void			IncrementTry();
+	EGuessValidity	CheckGuessValidity(FString);
 	FBullCowsCount	SubmitGuess(FString);
+	void			SetGameWonStatus(int32);
 
 private:
 	int32 MyCurrentTry;
 	int32 MaxTries;
+	bool bIsGameWon;
 	FString MyHiddenWord;
 };

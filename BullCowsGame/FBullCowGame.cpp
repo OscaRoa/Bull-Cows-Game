@@ -12,41 +12,46 @@ FBullCowGame::FBullCowGame() { Reset(); }
 int32 FBullCowGame::GetMaxTries() const { return MaxTries; }
 int32 FBullCowGame::GetCurrentTry() const { return MyCurrentTry; }
 FString FBullCowGame::GetHiddenWord() const { return MyHiddenWord; }
+bool FBullCowGame::IsGameWon() const { return bIsGameWon; }
 int32 FBullCowGame::GetHiddenWordLength() const { return int32(MyHiddenWord.length()); }
 
 // Class methods
 void FBullCowGame::Reset()
 {
 	constexpr int MAX_TRIES = 5;
-	MaxTries = MAX_TRIES;
-
 	const FString HIDDEN_WORD = "planet";
+
+	MaxTries = MAX_TRIES;
 	MyHiddenWord = HIDDEN_WORD;
-
 	MyCurrentTry = 1;
+	bIsGameWon = false;
 
 	return;
 }
 
-bool FBullCowGame::IsGameWon() const
+EGuessValidity FBullCowGame::CheckGuessValidity(FString Guess)
 {
-	return false;
-}
-
-bool FBullCowGame::CheckGuessValidity(FString)
-{
-	return false;
-}
-
-void FBullCowGame::IncrementTry()
-{
-	MyCurrentTry++;
-
-	return;
+	if (Guess.length() != GetHiddenWordLength())
+	{
+		return EGuessValidity::Invalid_Length;
+	}
+	else if (false)
+	{
+		return EGuessValidity::Not_Isogram;
+	}
+	else if (false)
+	{
+		return EGuessValidity::No_Lowercase;
+	}
+	else
+	{
+		return EGuessValidity::Ok;
+	}
 }
 
 FBullCowsCount FBullCowGame::SubmitGuess(FString Guess)
 {
+	MyCurrentTry++;
 	FBullCowsCount Count;
 	FString HiddenWord = GetHiddenWord();
 	int32 HiddenWordLength = GetHiddenWordLength();
@@ -67,5 +72,17 @@ FBullCowsCount FBullCowGame::SubmitGuess(FString Guess)
 		}
 	}
 
+	SetGameWonStatus(Count.Bulls);
+
 	return Count;
+}
+
+void FBullCowGame::SetGameWonStatus(int32 Bulls)
+{
+	if (Bulls == GetHiddenWordLength())
+	{
+		bIsGameWon = true;
+	}
+
+	return;
 }
